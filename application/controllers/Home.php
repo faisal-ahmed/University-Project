@@ -8,7 +8,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once 'Base.php';
+require_once BASEPATH . "../application/controllers/Base.php";
 
 class Home extends Base
 {

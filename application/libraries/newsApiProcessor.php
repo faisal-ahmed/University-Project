@@ -6,7 +6,7 @@
  * Time: 9:24 PM
  */
 
-require_once "utilities.php";
+require_once BASEPATH . "../application/libraries/utilities.php";
 
 function getNewsApiSources(){
     global $endpoints;
