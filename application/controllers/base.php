@@ -8,6 +8,12 @@ class Base extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
+        $this->debug($_SERVER);
+        if (strpos($_SERVER, "localhost") !== false) {
+            $this->load->database('default');
+        } else {
+            $this->load->database('live');
+        }
         $this->load->model('UserModel');
     }
 
