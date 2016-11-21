@@ -34,10 +34,10 @@
 
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="http://www.faisal-ahmed.com/">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="<?php echo base_url(); ?>index.php/ContentProviders">Content Providers</a></li>
+                    <li class="<?php if ($menu == 'home') echo "active"?>"><a href="<?php echo base_url(); ?>">Home</a></li>
+                    <li class="<?php if ($menu == 'about') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/AboutUs">About Us</a></li>
+                    <li class="<?php if ($menu == 'services') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/Services">Services</a></li>
+                    <li class="<?php if ($menu == 'content') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/ContentProviders">Content Providers</a></li>
                     <!--<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu">
@@ -47,9 +47,9 @@
                             <li><a href="shortcodes.html">Shortcodes</a></li>
                         </ul>
                     </li>-->
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Login</a></li>
+                    <li class="<?php if ($menu == 'blog') echo "active"?>"><a href="#">Blog</a></li>
+                    <li class="<?php if ($menu == 'contact') echo "active"?>"><a href="#">Contact</a></li>
+                    <li class="<?php if ($menu == 'login') echo "active"?>"><a href="#">Login</a></li>
                 </ul>
             </div>
         </div><!--/.container-->

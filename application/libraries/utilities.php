@@ -21,6 +21,9 @@ $endpoints = array(
         ),
         "articles" => array(
             "endpoint" => "https://newsapi.org/v1/articles",
+            "sortT" => "top",
+            "sortL" => "latest",
+            "sortP" => "popular",
         ),
     ),
     "faroo" => array(),

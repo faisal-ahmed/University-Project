@@ -54,16 +54,15 @@ class Base extends CI_Controller {
     }
 
     protected function viewLoad($view = null, $data = null){
-        if (!isset($data['hide_menu'])){
-            $data['hide_menu'] = '';
+        if (!isset($data['menu'])){
+            $data['menu'] = 'home';
         }
         $data['user_role'] = $this->getUserRole();
         $data['username'] = $this->getSessionAttr('username');
+
         $this->load->view('common/header');
 
         if ($this->isLoggedIn()){
-            $this->load->view("landing/landingHeader", $data);
-            $this->load->view("landing/landingLeftMenu", $data);
         } else {
             $this->load->view("common/menu", $data);
         }
@@ -73,7 +72,6 @@ class Base extends CI_Controller {
         }
 
         if ($this->isLoggedIn()){
-            $this->load->view("landing/landingFooter", $data);
         }
 
         $this->load->view('common/footer');
@@ -81,5 +79,15 @@ class Base extends CI_Controller {
 
     protected function redirectToHome(){
         redirect('Home', 'refresh');
+    }
+
+    function getPost($attr, $filter = true) {
+        $return = trim($this->input->get_post($attr, $filter));
+        return $return;
+    }
+
+    function postGet($attr, $filter = true) {
+        $return = trim($this->input->post_get($attr, $filter));
+        return $return;
     }
 }

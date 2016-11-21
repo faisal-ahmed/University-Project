@@ -10,9 +10,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once 'Base.php';
 
-class AboutUs extends Base
+class Services extends Base
 {
-    private $menu = 'about';
+    private $menu = 'services';
     public function __construct()
     {
         parent::__construct();
@@ -21,6 +21,6 @@ class AboutUs extends Base
     public function index()
     {
         $data = array("menu" => $this->menu);
-        $this->viewLoad("common/about_us", $data);
+        $this->viewLoad("common/services", $data);
     }
 }

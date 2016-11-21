@@ -17,3 +17,27 @@
 .register_link h3 a:hover{
     color: #FFFFFF !important;
 }
+
+.content_providers {
+    height: 270px;
+    padding: 10px !important;
+}
+
+.content_providers img {
+    max-height: 250px;
+}
+
+.content_providers .overlay h3{
+    margin: 0;
+}
+
+.content_providers .overlay {
+    padding: 15px;
+    height: 250px;
+}
+
+.post_reply img{
+    width: 120px !important;
+    height: 120px !important;
+    border: 5px solid #c52d2f !important;
+}
