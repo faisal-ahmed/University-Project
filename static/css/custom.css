@@ -1,0 +1,19 @@
+#footer {
+    border-top: 5px solid #c52d2f;
+}
+
+#header {
+    /*border-bottom: 5px solid #c52d2f;*/
+}
+
+.search_box{
+    background-position: 98% 15px !important;
+}
+
+.register_link{
+    text-align: center;
+}
+
+.register_link h3 a:hover{
+    color: #FFFFFF !important;
+}
