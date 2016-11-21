@@ -8,7 +8,7 @@ class Base extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        if (strpos($_SERVER, "localhost") !== false) {
+        if (strpos($_SERVER['SERVER_NAME'], "localhost") !== false) {
             $this->load->database('default');
         } else {
             $this->load->database('live');
