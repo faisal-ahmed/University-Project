@@ -13,6 +13,10 @@
     <link href="<?php echo base_url() ?>static/css/animate.min.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/prettyPhoto.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/main.css" rel="stylesheet">
+    <!--Select2 CSS-->
+    <link href="<?php echo base_url() ?>static/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <!--Select2 CSS-->
+
     <link href="<?php echo base_url() ?>static/css/custom.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/responsive.css" rel="stylesheet">
     <!--[if lt IE 9]>

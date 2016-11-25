@@ -12,7 +12,7 @@
         </div>
 
         <div class="register_link wow fadeInDown">
-            <h3><a href="#">Register Here</a> to pin your search result. You may want to try <a href="#">Advance Search</a>.</h3>
+            <h3><a href="<?php echo base_url(); ?>index.php/Auth/register">Register Here</a> to pin your search result. You may want to try <a href="<?php echo base_url(); ?>index.php/Search/ArchivedContent">Advance Search</a>.</h3>
         </div>
 
     </div><!--/.container-->
@@ -28,7 +28,7 @@
                         <label for="content-provider">Content Provider</label>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-3">
-                        <select name="contentProvider" onchange="this.form.submit();" class="form-control menuselection">
+                        <select name="contentProvider" id="contentProvider" onchange="this.form.submit();" class="form-control menuselection">
                             <?php foreach ($contentProvider['sources'] as $key => $value) { ?>
                                 <option <?php if (isset($_REQUEST['contentProvider']) && $_REQUEST['contentProvider'] == $value->id) echo 'selected="selected" '; ?> value="<?php echo $value->id ?>"><?php echo $value->name ?></option>
                             <?php } ?>
