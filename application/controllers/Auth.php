@@ -26,10 +26,21 @@ class Auth extends Base
     public function login()
     {
         $data = array("menu" => $this->menu);
+
+        $this->viewLoad("common/login", $data);
     }
 
     public function register()
     {
         $data = array("menu" => $this->menu);
+
+        $this->viewLoad("common/register", $data);
+    }
+
+    public function forgetPassword()
+    {
+        $data = array("menu" => $this->menu);
+
+        $this->viewLoad("common/forget_password", $data);
     }
 }

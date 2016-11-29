@@ -10,8 +10,8 @@
                     <li><a href="<?php echo base_url(); ?>index.php/Search/ArchivedContent">Archived Content Search</a></li>
                     <li><a href="<?php echo base_url(); ?>index.php/Search/RecentContent">Recent Content Search</a></li>
                     <!--<li><a href="<?php /*echo base_url(); */?>index.php/AboutUs">About Us</a></li>
-                    <li><a href="#">Faq</a></li>
-                    <li><a href="#">Contact Us</a></li>-->
+                    <li><a href="#">Faq</a></li>-->
+                    <li><a href="<?php echo base_url(); ?>index.php/Auth/Register">Register</a></li>
                 </ul>
             </div>
         </div>
@@ -30,6 +30,7 @@
 
 <script type="text/javascript">
     <?php if ($menu == 'home') { ?>jQuery('#contentProvider').select2();<?php } ?>
+    <?php if ($menu == 'search' && $subMenu == 'recent') { ?>jQuery('#contentProvider').select2();<?php } ?>
 </script>
 
 </body>

@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html"><img src="<?php echo base_url() ?>static/images/logo.png" alt="logo"></a>
+                <a class="navbar-brand" href="<?php echo base_url(); ?>"><img src="<?php echo base_url() ?>static/images/acm_logo.png" width="115" alt="logo"></a>
             </div>
 
             <div class="collapse navbar-collapse navbar-right">
@@ -26,7 +26,7 @@
                     <!--<li class="<?php /*if ($menu == 'about') echo "active"*/?>"><a href="<?php /*echo base_url(); */?>index.php/AboutUs">About Us</a></li>
                     <li class="<?php /*if ($menu == 'blog') echo "active"*/?>"><a href="#">Blog</a></li>
                     <li class="<?php /*if ($menu == 'contact') echo "active"*/?>"><a href="#">Contact</a></li>-->
-                    <li class="<?php if ($menu == 'login') echo "active"?>"><a href="#">Login</a></li>
+                    <li class="<?php if ($menu == 'login') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/Auth/Login">Enter</a></li>
                 </ul>
             </div>
         </div><!--/.container-->

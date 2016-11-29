@@ -25,7 +25,7 @@
                 <h2>Latest Top Contents</h2>
                 <form action="" method="get" id="latestContentForm" role="form">
                     <div class="col-xs-12 col-sm-2 col-md-2">
-                        <label for="content-provider">Content Provider</label>
+                        <label for="content-provider">Content Providers</label>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-md-3">
                         <select name="contentProvider" id="contentProvider" onchange="this.form.submit();" class="form-control menuselection">
