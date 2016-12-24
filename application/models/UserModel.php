@@ -288,21 +288,39 @@ class UserModel extends BaseModel
             $this->db->select("*");
             $this->db->where('user_id', $user_id);
             $this->db->where('content_id', $content_id);
-            $this->db->order_by('desc');
+            $this->db->join("users", "users.id = comment.user_id", "left");
+            $this->db->order_by('comment.id', 'desc');
             $res = $this->db->get('comment');
 
             foreach ($res->result() as $comment) {
                 $retArray['comments'][] = array(
+                    'fullname' => $comment->first_name . " " . $comment->last_name,
+                    'profile_picture' => $comment->profile_picture,
                     'comment' => $comment->comment,
                     'at' => $comment->commented_at,
                 );
             }
 
-            $return[] = $retArray;
+            $return = $retArray;
             break;
         }
 
         return $return;
     }
 
+    function addComment($user_id){
+        $content_id = $this->postGet("content_id");
+        $comment = $this->postGet("comment");
+
+        if ($comment == '') return false;
+
+        $data = array(
+            "content_id" => $content_id,
+            "user_id" => $user_id,
+            "comment" => $comment,
+            "commented_at" => time(),
+        );
+        $this->db->insert("comment", $data);
+        return true;
+    }
 }

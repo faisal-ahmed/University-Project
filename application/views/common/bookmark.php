@@ -26,9 +26,3 @@
         </div><!--/.row-->
     </div><!--/.container-->
 </section><!--/#middle-->
-
-<script type="text/javascript">
-    function updateFilter(value){
-        jQuery("#contentFilter").val(value);
-    }
-</script>

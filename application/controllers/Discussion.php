@@ -34,6 +34,17 @@ class Discussion extends Base
     }
 
     public function view(){
+        $data = array("menu" => $this->menu);
 
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            if ($this->UserModel->addComment($this->getUserId())) {
+            } else {
+                $data['error'] = 'Comment cannot be added now. Please try again later.';
+            }
+        }
+
+        $data['discussion'] = $this->UserModel->load_discussion($this->getUserId(), $this->postGet("id"));
+
+        $this->viewLoad("common/view_discussion", $data);
     }
 }
