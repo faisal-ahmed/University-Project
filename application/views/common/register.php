@@ -4,8 +4,9 @@
             <h2>It's very easy to have an account. Register here.</h2>
         </div>
         <div class="row wow fadeInDown">
-            <div class="status alert alert-success" style="display: none"></div>
-            <form id="main-contact-form" class="login-form" method="post" action="">
+            <div class="status alert alert-danger alert-dismissable" style="<?php if (!isset($error)) echo 'display: none'?>"><?php echo $error ?></div>
+            <div class="status alert alert-warning alert-dismissable" style="<?php if (!isset($notification)) echo 'display: none'?>"><?php echo $notification ?></div>
+            <form class="login-form" method="post" action="">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="first_name">First Name *</label>
@@ -17,8 +18,8 @@
                     </div>
                     <div class="form-group">
                         <label>Gender *</label><br/>
-                        <label for="male">Male </label>&nbsp;&nbsp;<input type="radio" name="gender" id="male" required="required">&nbsp;&nbsp;
-                        <label for="female">Female </label>&nbsp;&nbsp;<input type="radio" name="gender" id="female"required="required">
+                        <label for="male">Male </label>&nbsp;&nbsp;<input type="radio" name="gender" value="Male" id="male" required="required">&nbsp;&nbsp;
+                        <label for="female">Female </label>&nbsp;&nbsp;<input type="radio" name="gender" value="Female" id="female"required="required">
                     </div>
                     <div class="form-group">
                         <label for="email">Email *</label>
@@ -29,7 +30,7 @@
                         <input type="password" name="password" id="password" class="form-control" required="required" placeholder="Enter your password">
                     </div>
                     <div class="form-group">
-                        <button type="submit" name="submit" class="btn btn-primary btn-lg" required="required">Register</button>
+                        <button type="submit" name="submit" class="btn btn-primary btn-lg">Register</button>
                     </div>
                 </div>
             </form>

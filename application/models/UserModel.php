@@ -19,216 +19,65 @@ class UserModel extends BaseModel
 
     function login()
     {
-        $username = $this->postGet('username');
+        $email = $this->postGet('email');
         $password = $this->postGet('password');
 
-        $this->db->select("users.id, role.id as role_id");
-        $this->db->where('username', $username);
+        $this->db->select("*");
+        $this->db->where('email', $email);
         $this->db->where('password', md5($password));
-        $this->db->join('role', 'role.id = users.role_id', 'left');
         $res = $this->db->get('users');
 
         foreach ($res->result() as $user) {
-            $this->session->set_userdata('login', true);
-            $this->session->set_userdata('username', $username);
-            $this->session->set_userdata('user_id', $user->id);
-            $role = ($user->role_id == 1) ? ADMIN_ROLE_TITLE : STUDENT_ROLE_TITLE;
-            $this->session->set_userdata('role', $role);
+            $this->createUserSession($user->id, $user->first_name, $user->last_name);
+/*            $this->session->set_userdata('login', true);
+            $this->session->set_userdata('username', $user->first_name . " " . $user->last_name);
+            $this->session->set_userdata('user_id', $user->id);*/
             return true;
         }
         return false;
     }
 
-    function checkLoanStatus(){
-        $student_id = $this->postGet('student_id');
-        $this->db->select('loan.status');
-        $this->db->from('loan');
-        $this->db->join("personal_info p", "p.user_id = loan.user_id", "left");
-        $this->db->where('p.student_id', $student_id);
-        $this->db->order_by("loan.id", "desc");
-        $res = $this->db->get();
-
-        foreach ($res->result() as $key => $value){
-            return $value->status . ".";
-        }
-
-        return false;
+    function createUserSession($id, $first_name, $last_name){
+        $this->session->set_userdata('login', true);
+        $this->session->set_userdata('username', $first_name . " " . $last_name);
+        $this->session->set_userdata('user_id', $id);
     }
 
-    function newLoanApplication(){
-        $genericErrorMessage = "An error found. Please try again later!";
+    function register(){
+        $email = $this->postGet('email');
+        $emailVaild = true;
 
-        $data = $this->getData();
-        if ( ($errorMessage = $this->validLoanApplicationData($data)) !== true ) return $errorMessage;
+        $this->db->where('email', $email);
+        $res = $this->db->get('users');
 
-        /* User Information Creation Started */
-
-        $userData = array(
-            'username' => time(),
-            'password' => md5($data['student_id']),
-            'email' => $this->postGet('email'),
-            'role_id' => '2',
-            'created_time' => time(),
-            'modified_time' => time(),
-        );
-
-        $userCreated = $this->db->insert('users', $userData);
-
-        if (!$userCreated){
-            return $genericErrorMessage;
-        }
-
-        $user_id = $this->db->insert_id();
-
-        /* User Information Creation Ended */
-
-        /* Personal Information Creation Ended */
-
-        $personal_info_data = array(
-            'user_id' => $user_id,
-            'firstname' => $data['fname'] ,
-            'lastname' => $data['lname'] ,
-            'national_id' => $data['nid'] ,
-            'student_id' => $data['student_id'] ,
-            'student_cgpa' => $data['student_cgpa'] ,
-            'present_address' => $data['students_present_address'],
-            'permanent_address' => $data['students_permanent_address'],
-            'phone' => $data['student_phone'],
-            'completed_credits' => $data['completed_credits'],
-            'last_semester' => $data['last_semester'],
-            'taken_credits' => $data['taken_credits'],
-            'next_semester' => $data['next_semester'],
-            'previous_semester_gpa' => $data['previous_semester_gpa'],
-        );
-
-        $personal_info_created = $this->db->insert('personal_info', $personal_info_data);
-
-        if (!$personal_info_created){
-            return $genericErrorMessage;
-        }
-
-        /* Personal Information Creation Ended */
-
-        /* Loan Application Creation Started */
-
-        $loan_data = array(
-            'user_id' => $user_id,
-            'requested_amount' => $data['loan_amount'] ,
-            'note' => $data['reason']
-        );
-
-        $loanApplicationSubmitted = $this->db->insert('loan', $loan_data);
-
-        if (!$loanApplicationSubmitted){
-            return $genericErrorMessage;
-        }
-
-        $loan_id = $this->db->insert_id();
-
-        /* Loan Application Creation Ended */
-
-        /* Loan Guarantor Creation Started */
-
-        $loan_guarantor_data = array(
-            'loan_id' => $loan_id ,
-            'guarantor_name' => $data['gname'] ,
-            'relation' => $data['relation'],
-            'guarantor_contact_no' => $data['gphone'] ,
-            'guarantor_address' => $data['gaddress']
-        );
-
-        $loan_guarantor_created = $this->db->insert('loan_guarantor', $loan_guarantor_data);
-
-        if (!$loan_guarantor_created){
-            return $genericErrorMessage;
-        }
-
-        /* Loan Guarantor Creation Ended */
-
-        return true;
-    }
-
-    function validLoanApplicationData($data){
-        if ( ($status = $this->validateRequired($data) !== true) ) return $status;
-        if ( ($status = $this->validateEmail($data) !== true) ) return $status;
-        return true;
-    }
-
-    function validateRequired($data){
-        $required = array(
-            'student_id', 'fname', 'lname', 'student_id', 'student_cgpa',
-            'student_phone', 'students_present_address', 'loan_amount',
-            'reason', 'gname', 'relation', 'gphone', 'gaddress',
-        );
-
-        foreach ($required as $key => $value) {
-            if (!isset($data[$value]) || $data[$value] == '') {
-                return ucwords(str_replace("_", " ", $value)) . " is required.";
-            }
-        }
-
-        return true;
-    }
-
-    function validateEmail($data){
-        $email = array('email');
-
-        foreach ($email as $key => $value){
-            if (!filter_var($data[$value], FILTER_VALIDATE_EMAIL)) {
-                return ucwords(str_replace("_", " ", $value)) . " is invalid.";
-            }
-        }
-
-        return true;
-    }
-
-
-    function getData(){
-        $data = array();
-
-        $data['fname'] = $this->postGet('fname');
-        $data['lname'] = $this->postGet('lname');
-        $data['nid'] = $this->postGet('nid');
-        $data['student_id'] = $this->postGet('student_id');
-        $data['student_cgpa'] = $this->postGet('student_cgpa');
-        $data['student_phone'] = $this->postGet('student_phone');
-        $data['students_present_address'] = $this->postGet('students_present_address');
-        $data['students_permanent_address'] = $this->postGet('students_permanent_address');
-        $data['loan_amount'] = $this->postGet('loan_amount');
-
-        $data['reason'] = $this->postGet('reason');
-        $data['gname'] = $this->postGet('gname');
-        $data['relation'] = $this->postGet('relation');
-        $data['gphone'] = $this->postGet('gphone');
-        $data['gaddress'] = $this->postGet('gaddress');
-        $data['email'] = $this->postGet('email');
-        $data['completed_credits'] = $this->postGet('student_completed_credits');
-        $data['last_semester'] = $this->postGet('last_semester_name');
-        $data['taken_credits'] = $this->postGet('student_taken_credits');
-        $data['next_semester'] = $this->postGet('next_semester_name');
-        $data['previous_semester_gpa'] = $this->postGet('previous_semester_gpa');
-        return $data;
-    }
-    function getUserData($userId) {
-        $data = array();
-        $this->db->select('p.firstname, p.lastname, users.email, p.phone');
-        $this->db->from("users");
-        $this->db->join("personal_info p", "p.user_id = users.id", "left");
-        $this->db->where('users.id', $userId);
-        $res = $this->db->get();
-
-        foreach ($res->result() as $row){
-            $data = array(
-                'firstname' => $row->firstname,
-                'lastname' => $row->lastname,
-                'email' => $row->email,
-                'phone' => $row->phone,
-            );
-
+        foreach ($res->result() as $user) {
+            $emailVaild = false;
             break;
         }
 
-        return $data;
+        if ($emailVaild) {
+            $usersData = array(
+                'first_name' => $this->postGet('first_name'),
+                'last_name' => $this->postGet('last_name'),
+                'email' => $this->postGet('email'),
+                'password' => md5($this->postGet('password')),
+                'gender' => $this->postGet('gender'),
+                'created_at' => time(),
+            );
+
+            $usersInfoCreate = $this->db->insert('users', $usersData);
+
+            if (!$usersInfoCreate){
+                return "An error found. Please try again later!";
+            }
+
+            $this->createUserSession($this->db->insert_id(), $usersData['first_name'], $usersData['last_name']);
+
+        } else {
+            return 'The email address is already in use! Please try with a different email address.';
+        }
+
+        return true;
     }
 
     function updateProfile($userId){
@@ -247,21 +96,14 @@ class UserModel extends BaseModel
         }
 
         if ($passwordValid && $newPassword == $confirmPassword) {
-            $personalInfoData = array(
-                'firstname' => $this->postGet('fname'),
-                'lastName' => $this->postGet('lname'),
-                'phone' => $this->postGet('phone'),
-            );
-
-            $this->db->where('user_id', $userId);
-            $personalInfoUpdate = $this->db->update('personal_info', $personalInfoData);
-
-            if (!$personalInfoUpdate){
-                return "An error found. Please try again later!";
-            }
-
+            //TODO: Profile Picture upload
             $usersData = array(
+                'first_name' => $this->postGet('first_name'),
+                'last_name' => $this->postGet('last_name'),
+                'phone' => $this->postGet('phone'),
                 'email' => $this->postGet('email'),
+                'date_of_birth' => $this->postGet('date_of_birth'),
+                'profile_picture' => $this->postGet('profile_picture'),
             );
 
             if ($newPassword != '') {
@@ -282,41 +124,185 @@ class UserModel extends BaseModel
         return true;
     }
 
-    function forgetPassword(){
-        $email = $this->postGet('email');
-        $userId = '';
-        $emailData = array();
+    /* Bookmark Model */
+    function create_bookmark($user_id){
+        $id = false;
+        $url = $this->postGet('url');
+        $title = $this->postGet('title');
+        $imageSource = $this->postGet('im');
+        $source = $this->postGet('s');
 
-        $this->db->select("users.id, username, p.firstname, p.lastname");
-        $this->db->join("personal_info p", "p.user_id = users.id", "left");
-        $this->db->where('users.email', $email);
-        $res = $this->db->get('users');
+        $this->db->where('source', $source);
+        $this->db->where('title', $title);
+        $this->db->where('url', $url);
+        $this->db->where('url_to_image', $imageSource);
+        $res = $this->db->get('content');
 
-        foreach ($res->result() as $user) {
-            $userId = $user->id;
-            $emailData['name'] = $user->firstname . " " . $user->lastname;
-            $emailData['username'] = $user->username;
+        foreach ($res->result() as $content) {
+            $id = $content->id;
             break;
         }
 
-        if ($userId == '') {
-            return false;
+        if ($id === false){
+            $data = array(
+                "source" => $source,
+                "title" => $title,
+                "url" => $url,
+                "url_to_image" => $imageSource,
+            );
+            $this->db->insert("content", $data);
+
+            $id = $this->db->insert_id();
         }
 
-        $newPassword = $this->randomPassword();
-        $usersData['password'] = md5($newPassword);
-        $emailData['password'] = $newPassword;
+        $this->db->where('user_id', $user_id);
+        $this->db->where('content_id', $id);
+        $res = $this->db->get('bookmark');
 
-        $this->db->where('id', $userId);
-        $usersInfoUpdate = $this->db->update('users', $usersData);
-
-        if ($usersInfoUpdate){
-            $this->sendEmail($email, 'UIU Loan Management',
-                    "emailTemplate/loanApproved.php", $emailData);
-            return true;
-        } else {
-            return 'An error occured. Please try again later.';
+        foreach ($res->result() as $room) {
+            return "You have already bookmarked the content.";
         }
 
+        $data = array("content_id" => $id, "user_id" => $user_id);
+        $this->db->insert("bookmark", $data);
+
+        return "A content has been bookmarked successfully";
     }
+
+    function remove_bookmark($user_id){
+        $this->db->where('content_id', $this->postGet("content"));
+        $this->db->where('user_id', $user_id);
+        $res = $this->db->delete('bookmark');
+
+        return "The bookmark has been removed successfully.";
+    }
+
+    function list_bookmark($user_id){
+        $return = array();
+        $this->db->select("*");
+        $this->db->where('user_id', $user_id);
+        $this->db->join("content", "bookmark.content_id = content.id", "left");
+        $res = $this->db->get('bookmark');
+
+        foreach ($res->result() as $bookmarked_content) {
+            $return[] = array(
+                "id" => $bookmarked_content->id,
+                "source" => $bookmarked_content->source,
+                "title" => $bookmarked_content->title,
+                "url" => $bookmarked_content->url,
+                "url_to_image" => $bookmarked_content->url_to_image,
+            );
+        }
+
+        return $return;
+    }
+
+    /* Discussion Model */
+    function create_discussion($user_id){
+        $id = false;
+        $url = $this->postGet('url');
+        $title = $this->postGet('title');
+        $imageSource = $this->postGet('im');
+        $source = $this->postGet('s');
+
+        $this->db->where('source', $source);
+        $this->db->where('title', $title);
+        $this->db->where('url', $url);
+        $this->db->where('url_to_image', $imageSource);
+        $res = $this->db->get('content');
+
+        foreach ($res->result() as $content) {
+            $id = $content->id;
+            break;
+        }
+
+        if ($id === false) {
+            $data = array(
+                "source" => $source,
+                "title" => $title,
+                "url" => $url,
+                "url_to_image" => $imageSource,
+            );
+            $this->db->insert("content", $data);
+
+            $id = $this->db->insert_id();
+        }
+
+        $this->db->where('user_id', $user_id);
+        $this->db->where('content_id', $id);
+        $res = $this->db->get('discussion_room');
+
+        foreach ($res->result() as $room) {
+            return "You have already joined in the discussion room.";
+        }
+
+        $data = array("content_id" => $id, "user_id" => $user_id);
+        $this->db->insert("discussion_room", $data);
+
+        return "You have been assigned in the room successfully.";
+    }
+
+    function remove_discussion($user_id){
+        $this->db->where('content_id', $this->postGet("content"));
+        $this->db->where('user_id', $user_id);
+        $res = $this->db->delete('discussion_room');
+
+        return "You have been removed from the room successfully.";
+    }
+
+    function list_discussion($user_id){
+        $return = array();
+        $this->db->select("*");
+        $this->db->where('user_id', $user_id);
+        $this->db->join("content", "discussion_room.content_id = content.id", "left");
+        $res = $this->db->get('discussion_room');
+
+        foreach ($res->result() as $discussion) {
+            $return[] = array(
+                "id" => $discussion->id,
+                "source" => $discussion->source,
+                "title" => $discussion->title,
+                "url" => $discussion->url,
+                "url_to_image" => $discussion->url_to_image,
+            );
+        }
+
+        return $return;
+    }
+
+    function load_discussion($user_id, $content_id){
+        $return = array();
+        $this->db->select("*");
+        $this->db->where('id', $content_id);
+        $res = $this->db->get('content');
+
+        foreach ($res->result() as $discussion) {
+            $retArray = array(
+                "id" => $discussion->id,
+                "source" => $discussion->source,
+                "title" => $discussion->title,
+                "url" => $discussion->url,
+                "url_to_image" => $discussion->url_to_image,
+            );
+
+            $this->db->select("*");
+            $this->db->where('user_id', $user_id);
+            $this->db->where('content_id', $content_id);
+            $this->db->order_by('desc');
+            $res = $this->db->get('comment');
+
+            foreach ($res->result() as $comment) {
+                $retArray['comments'][] = array(
+                    'comment' => $comment->comment,
+                    'at' => $comment->commented_at,
+                );
+            }
+
+            $return[] = $retArray;
+            break;
+        }
+
+        return $return;
+    }
+
 }

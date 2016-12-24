@@ -22,6 +22,7 @@ class Home extends Base
     public function index()
     {
         $data = array();
+        $data["subMenu"] = "recent";
         $contentProviders = getNewsApiSources();
         if ($contentProviders['result'] == 'success') {
             $contentProviders = $contentProviders['data'];
@@ -31,13 +32,23 @@ class Home extends Base
         $data['contentProvider'] = $contentProviders;
 
         $selectedContentProvider = $this->getPost('contentProvider') != false ? $this->getPost('contentProvider') : 'abc-news-au';
-        $content = getNewsApiArticle($selectedContentProvider);
-        if ($content['result'] == 'success') {
-            $content = $content['data'];
+        $selectedContentFilter = $this->getPost('contentFilter') != false ? $this->getPost('contentFilter') : 'sortT';
+        $content = getNewsApiArticle($selectedContentProvider, $selectedContentFilter);
+        if (isset($content['result']) && $content['result'] == 'success') {
+            if (isset($content['data']['status']) && $content['data']['status'] == 'error') {
+                $content = $content['data']['message'];
+                $data['status'] = 'error';
+            } else {
+                $content = $content['data'];
+                $data['status'] = 'success';
+            }
         } else {
             $content = '';
+            $data['status'] = 'unknown';
         }
         $data['content'] = $content;
+        $data['filter'] = $selectedContentFilter;
+
 
         $this->viewLoad("common/home", $data);
     }

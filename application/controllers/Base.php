@@ -24,6 +24,12 @@ class Base extends CI_Controller {
         return $this->getSessionAttr('login');
     }
 
+    protected function redirectLoggedInUser(){
+        if ($this->isLoggedIn()) {
+            redirect('Home', 'refresh');
+        }
+    }
+
     protected function getSessionAttr($attr) {
         if ($this->session->userdata("$attr") ) {
             return $this->session->userdata("$attr");
@@ -63,15 +69,15 @@ class Base extends CI_Controller {
         $this->load->view('common/header');
 
         if ($this->isLoggedIn()){
+            $data['loggedIn'] = 'true';
         } else {
-            $this->load->view("common/menu", $data);
+            $data['loggedIn'] = 'false';
         }
+
+        $this->load->view("common/menu", $data);
 
         if (isset($view)) {
             $this->load->view("$view", $data);
-        }
-
-        if ($this->isLoggedIn()){
         }
 
         $this->load->view('common/footer');

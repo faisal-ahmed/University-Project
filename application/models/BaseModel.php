@@ -45,7 +45,7 @@ class BaseModel extends CI_Model
         $this->load->library('email', $config);
 
         $this->email->set_newline("\r\n");
-        $this->email->from('no.reply@uiu.ac.bd', 'United International University');
+        $this->email->from('no.reply@faisal-ahmed.com', 'Automated Content-Searching Machine');
         $this->email->to($to);
 
         $this->email->subject($subject);
