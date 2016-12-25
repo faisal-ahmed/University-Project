@@ -40,14 +40,20 @@ class BaseModel extends CI_Model
     function sendEmail($to, $subject, $message){
         $config = Array(
             'mailtype'  => 'html',
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'faisal.ahmed0001@gmail.com',
+            'smtp_pass' => '$R@h1w@134431$',
+            'charset'   => 'iso-8859-1',
+            'wordwrap'   => TRUE
         );
+//        $config['protocol'] = 'sendmail';
+//        $config['mailpath'] = '/usr/sbin/sendmail';
+
 /*        $message = $this->load->view("$view", $data, TRUE);*/
         $message .= "<br/><br/><br/>Thanks<br/>ACM Team";
-        $headers = "From: Automated Content-Searching Machine <no.reply@faisal-ahmed.com>\r\n".
-            "MIME-Version: 1.0" . "\r\n" .
-            "Content-type: text/html; charset=UTF-8" . "\r\n";
-        var_dump(mail($to, $subject, $message, $headers)); die;
-/*        $this->load->library('email', $config);
+        $this->load->library('email', $config);
 
         $this->email->set_newline("\r\n");
         $this->email->from('no.reply@faisal-ahmed.com', 'Automated Content-Searching Machine');
@@ -56,6 +62,6 @@ class BaseModel extends CI_Model
         $this->email->subject($subject);
         $this->email->message($message);
 
-        $this->email->send();*/
+        $this->email->send();
     }
 }
