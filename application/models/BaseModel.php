@@ -34,14 +34,14 @@ class BaseModel extends CI_Model
     }
 
     function randomPassword($digit = 6){
-        return substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 5)) , 0, 5);
+        return substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', $digit)) , 0, $digit);
     }
 
-    function sendEmail($to, $subject, $view, $data){
+    function sendEmail($to, $subject, $message){
         $config = Array(
             'mailtype'  => 'html',
         );
-        $message = $this->load->view("$view", $data, TRUE);
+/*        $message = $this->load->view("$view", $data, TRUE);*/
         $this->load->library('email', $config);
 
         $this->email->set_newline("\r\n");

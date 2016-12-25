@@ -28,15 +28,15 @@ class UserModel extends BaseModel
         $res = $this->db->get('users');
 
         foreach ($res->result() as $user) {
+            if ($user->verified == '0') {
+                return "Your email has not been verified yet. Please verify your email first.";
+            }
             $this->createUserSession($user->id, $user->first_name, $user->last_name);
-/*            $this->session->set_userdata('login', true);
-            $this->session->set_userdata('username', $user->first_name . " " . $user->last_name);
-            $this->session->set_userdata('user_id', $user->id);*/
             $this->db->where('id', $user->id);
             $usersInfoUpdate = $this->db->update('users', array('last_logged_in' => time()));
             return true;
         }
-        return false;
+        return 'Invalid Email or Password.';
     }
 
     function createUserSession($id, $first_name, $last_name){
@@ -47,17 +47,17 @@ class UserModel extends BaseModel
 
     function register(){
         $email = $this->postGet('email');
-        $emailVaild = true;
+        $emailValid = true;
 
         $this->db->where('email', $email);
         $res = $this->db->get('users');
 
         foreach ($res->result() as $user) {
-            $emailVaild = false;
+            $emailValid = false;
             break;
         }
 
-        if ($emailVaild) {
+        if ($emailValid) {
             $usersData = array(
                 'first_name' => $this->postGet('first_name'),
                 'last_name' => $this->postGet('last_name'),
@@ -73,8 +73,18 @@ class UserModel extends BaseModel
                 return "An error found. Please try again later!";
             }
 
-            $this->createUserSession($this->db->insert_id(), $usersData['first_name'], $usersData['last_name']);
+            $verifyData = array(
+                "email" => $this->postGet("email"),
+                "type" => ACCOUNT_VERIFY_TYPE,
+                "code" => $this->randomPassword(8),
+            );
+            $usersInfoCreate = $this->db->insert('verification', $verifyData);
 
+            $subject = "Verify your account";
+            $body = "An account has been created on behalf of you. If it's you then please verify your email address by clcking the following link.\n\n";
+            $body .= (base_url() . "index.php/Auth/verify?um=" . $verifyData["email"] . "&c=" . $verifyData["code"]);
+
+            $this->sendEmail($verifyData['email'], $subject, $body);
         } else {
             return 'The email address is already in use! Please try with a different email address.';
         }
@@ -103,6 +113,7 @@ class UserModel extends BaseModel
         $passwordValid = $this->passwordCheck($userId, $password);
 
         if ($passwordValid && $newPassword == $confirmPassword) {
+            $usersData = array("modified_at" => time());
             if ($this->postGet('first_name')) {
                 $usersData['first_name'] = $this->postGet('first_name');
             }
@@ -141,7 +152,18 @@ class UserModel extends BaseModel
             }
 
             if ($triggerEmailVerification) {
-                //TODO: Trigger Email Verification
+                $verifyData = array(
+                    "email" => $this->postGet("email"),
+                    "type" => ACCOUNT_VERIFY_TYPE,
+                    "code" => $this->randomPassword(8),
+                );
+                $usersInfoCreate = $this->db->insert('verification', $verifyData);
+
+                $subject = "Verify your account";
+                $body = "An account has been created on behalf of you. If it's you then please verify your email address by clcking the following link.\n\n";
+                $body .= (base_url() . "index.php/Auth/verify?um=" . $verifyData["email"] . "&c=" . $verifyData["code"]);
+
+                $this->sendEmail($verifyData['email'], $subject, $body);
             }
 
         } else {
@@ -368,6 +390,48 @@ class UserModel extends BaseModel
             "commented_at" => time(),
         );
         $this->db->insert("comment", $data);
+        return true;
+    }
+
+    function Verify(){
+        $email = $this->postGet("um");
+        $code = $this->postGet("c");
+
+        $this->db->select("*");
+        $this->db->where('email', $email);
+        $this->db->where('code', $code);
+        $res = $this->db->get('verification');
+
+        foreach ($res->result() as $verified) {
+            $type = $verified->type;
+
+            $this->db->where('email', $email);
+            $this->db->where('code', $code);
+            $res = $this->db->delete('verification');
+
+            if ($type == ACCOUNT_RECOVERY_TYPE){
+                $this->db->where('email', $email);
+                $usersInfoUpdate = $this->db->update('users', array("password" => md5($code)));
+                return $code;
+            } else return $type;
+        }
+        return false;
+    }
+
+    function forgetPassword(){
+        $verifyData = array(
+            "email" => $this->postGet("email"),
+            "type" => ACCOUNT_RECOVERY_TYPE,
+            "code" => $this->randomPassword(8),
+        );
+        $usersInfoCreate = $this->db->insert('verification', $verifyData);
+
+        $subject = "Verify your account";
+        $body = "Someone requested to reset the password of your account. If it's you then please click on the following link to reset your password..\n\n";
+        $body .= (base_url() . "index.php/Auth/verify?um=" . $verifyData["email"] . "&c=" . $verifyData["code"]);
+
+        $this->sendEmail($verifyData['email'], $subject, $body);
+
         return true;
     }
 }

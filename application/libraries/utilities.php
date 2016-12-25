@@ -8,6 +8,8 @@
 
 define('ADMIN_ROLE_TITLE', 'admin');
 define('USER_ROLE_TITLE', 'user');
+define('ACCOUNT_VERIFY_TYPE', 'Account');
+define('ACCOUNT_RECOVERY_TYPE', 'Recovery');
 
 define('FAROO_API_KEY', '');
 define('NEWSAPI_API_KEY', '72e6bb9d34c44aaab1527936e3185f4b');

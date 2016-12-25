@@ -30,10 +30,10 @@ class Auth extends Base
         $data = array("menu" => $this->menu);
 
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            if ($this->UserModel->login()) {
+            if (($status = $this->UserModel->login()) === true) {
                 $this->redirectLoggedInUser();
             } else {
-                $data['error'] = 'Invalid Email or Password.';
+                $data['error'] = $status;
             }
         } else {
             $data['notification'] = 'Please enter your email and password to login.';
@@ -56,7 +56,7 @@ class Auth extends Base
 
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
             if (($status = $this->UserModel->register()) === true) {
-                $this->redirectLoggedInUser();
+                $data['success'] = "Thank You! Your account has been created! An email has been sent to your registered email address to verify. Please verify and login to continue.";
             } else {
                 $data['error'] = $status;
             }
@@ -114,5 +114,28 @@ class Auth extends Base
         }
 
         $this->viewLoad("common/forget_password", $data);
+    }
+
+    public function verify(){
+        $this->redirectLoggedInUser();
+        $data = array("menu" => $this->menu);
+        $redirect = false;
+
+        if (($status = $this->UserModel->Verify()) === false) {
+            $data['error'] = "Please stop! Invalid address.";
+        } else {
+            if ($status == ACCOUNT_VERIFY_TYPE) {
+                $data['success'] = 'Your email has been verified successfully. Please login to continue. You will be automatically redirected to login page in few seconds. If not then please click '. '<a href="' . base_url() . 'index.php/Auth/login">Enter</a>.';
+                $redirect = true;
+            } else {
+                $data['password'] = $status;
+            }
+        }
+
+        $this->viewLoad("common/email_verify", $data);
+        if ($redirect){
+            sleep(6);
+            $this->redirectToHome();
+        }
     }
 }
