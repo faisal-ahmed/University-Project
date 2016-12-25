@@ -46,7 +46,7 @@ class BaseModel extends CI_Model
         $headers = "From: Automated Content-Searching Machine <no.reply@faisal-ahmed.com>\r\n".
             "MIME-Version: 1.0" . "\r\n" .
             "Content-type: text/html; charset=UTF-8" . "\r\n";
-        mail($to, $subject, $message, $headers);
+        var_dump(mail($to, $subject, $message, $headers)); die;
 /*        $this->load->library('email', $config);
 
         $this->email->set_newline("\r\n");
