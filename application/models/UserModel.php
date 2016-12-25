@@ -42,6 +42,8 @@ class UserModel extends BaseModel
     function createUserSession($id, $first_name, $last_name){
         $this->session->set_userdata('login', true);
         $this->session->set_userdata('username', $first_name . " " . $last_name);
+        $this->session->set_userdata('first_name', $first_name);
+        $this->session->set_userdata('last_name', $last_name);
         $this->session->set_userdata('user_id', $id);
     }
 
@@ -116,10 +118,16 @@ class UserModel extends BaseModel
             $usersData = array("modified_at" => time());
             if ($this->postGet('first_name')) {
                 $usersData['first_name'] = $this->postGet('first_name');
+                $last_name = $this->session->userdata('last_name');
+                $this->session->set_userdata('username', $usersData['first_name'] . " " . $last_name);
+                $this->session->set_userdata('first_name', $usersData['first_name']);
             }
 
             if ($this->postGet('last_name')) {
                 $usersData['last_name'] = $this->postGet('last_name');
+                $first_name = $this->session->userdata('first_name');
+                $this->session->set_userdata('username', $first_name . " " . $usersData['last_name']);
+                $this->session->set_userdata('last_name', $usersData['last_name']);
             }
 
             if ($this->postGet('phone')) {
