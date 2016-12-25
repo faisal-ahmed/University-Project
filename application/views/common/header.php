@@ -9,7 +9,8 @@
 
     <!-- core CSS -->
     <link href="<?php echo base_url() ?>static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo base_url() ?>static/css/font-awesome.min.css" rel="stylesheet">
+    <!--<link href="<?php /*echo base_url() */?>static/css/font-awesome.min.css" rel="stylesheet">-->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/animate.min.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/prettyPhoto.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/main.css" rel="stylesheet">
