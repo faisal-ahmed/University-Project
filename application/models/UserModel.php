@@ -355,7 +355,7 @@ class UserModel extends BaseModel
             );
 
             $this->db->select("*");
-            $this->db->where('user_id', $user_id);
+/*            $this->db->where('user_id', $user_id);*/
             $this->db->where('content_id', $content_id);
             $this->db->join("users", "users.id = comment.user_id", "left");
             $this->db->order_by('comment.id', 'desc');
