@@ -42,7 +42,7 @@ class BaseModel extends CI_Model
             'mailtype'  => 'html',
         );
 /*        $message = $this->load->view("$view", $data, TRUE);*/
-        $message .= "\n\n\nThanks\nACM Team";
+        $message .= "<br/><br/><br/>Thanks<br/>ACM Team";
         $this->load->library('email', $config);
 
         $this->email->set_newline("\r\n");

@@ -83,7 +83,7 @@ class UserModel extends BaseModel
             $usersInfoCreate = $this->db->insert('verification', $verifyData);
 
             $subject = "Verify your account";
-            $body = "An account has been created on behalf of you. If it's you then please verify your email address by clcking the following link.\n\n";
+            $body = "An account has been created on behalf of you. If it's you then please verify your email address by clcking the following link.<br/><br/>";
             $body .= (base_url() . "index.php/Auth/verify?um=" . $verifyData["email"] . "&c=" . $verifyData["code"]);
 
             $this->sendEmail($verifyData['email'], $subject, $body);
@@ -178,7 +178,7 @@ class UserModel extends BaseModel
                 $usersInfoCreate = $this->db->insert('verification', $verifyData);
 
                 $subject = "Verify your account";
-                $body = "An account has been created on behalf of you. If it's you then please verify your email address by clcking the following link.\n\n";
+                $body = "An account has been created on behalf of you. If it's you then please verify your email address by clcking the following link.<br/><br/>";
                 $body .= (base_url() . "index.php/Auth/verify?um=" . $verifyData["email"] . "&c=" . $verifyData["code"]);
 
                 $this->sendEmail($verifyData['email'], $subject, $body);
@@ -449,7 +449,7 @@ class UserModel extends BaseModel
         $usersInfoCreate = $this->db->insert('verification', $verifyData);
 
         $subject = "Verify your account";
-        $body = "Someone requested to reset the password of your account. If it's you then please click on the following link to reset your password..\n\n";
+        $body = "Someone requested to reset the password of your account. If it's you then please click on the following link to reset your password..<br/><br/>";
         $body .= (base_url() . "index.php/Auth/verify?um=" . $verifyData["email"] . "&c=" . $verifyData["code"]);
 
         $this->sendEmail($verifyData['email'], $subject, $body);
