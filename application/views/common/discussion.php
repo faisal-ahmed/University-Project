@@ -1,3 +1,7 @@
+<script type="text/javascript">
+    var discussionUrl = [];
+    var discussionText = [];
+</script>
 <section id="recent-works" style="min-height: 520px;">
     <div class="container">
         <div class="row">
@@ -15,9 +19,14 @@
                             <a href="<?php echo base_url() ?>index.php/Bookmark?url=<?php echo $value['url'] ?>&title=<?php echo $value['title'] ?>&im=<?php echo $value['url_to_image'] ?>&s=<?php echo $value['source']?>" target="_blank">Bookmark</a> |
                             <a href="<?php echo base_url() ?>index.php/Discussion?content=<?php echo $value['id'] ?>" target="_blank">Leave Discussion Room</a> |
                             <a href="<?php echo base_url() ?>index.php/Discussion/View?id=<?php echo $value['id'] ?>" target="_blank">View Discussion</a>
+                            <div id="shareRoundIcons<?php echo $count ?>" class="round-shares"></div>
+                            <script type="text/javascript">
+                                discussionUrl.push('<?php echo $value['url'] ?>');
+                                discussionText.push('<?php echo $value['title'] . " - According to " . strtoupper($value['source']) ?>');
+                            </script>
                         </div>
                     </div>
-                <?php } ?>
+                <?php $count++; } ?>
             <?php } else { ?>
                 <div class="media reply_section wow fadeInDown">
                     <div class="status alert alert-danger">No discussion record found for your account!</div>
@@ -27,3 +36,6 @@
         </div><!--/.row-->
     </div><!--/.container-->
 </section><!--/#middle-->
+<script type="text/javascript">
+    var discussionCount = <?php echo $count; ?>;
+</script>

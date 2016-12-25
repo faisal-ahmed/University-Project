@@ -17,6 +17,11 @@
     <link href="<?php echo base_url() ?>static/select2/dist/css/select2.min.css" rel="stylesheet" />
     <!--Select2 CSS-->
 
+    <!--JS Social CSS-->
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials-theme-classic.css" />
+    <!--JS Social CSS-->
+
     <link href="<?php echo base_url() ?>static/css/custom.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/responsive.css" rel="stylesheet">
     <!--[if lt IE 9]>

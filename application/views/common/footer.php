@@ -28,9 +28,27 @@
 <script src="<?php echo base_url() ?>static/select2/dist/js/select2.min.js"></script>
 <!--Select2 JS-->
 
+<!--JS Social JS-->
+<!--<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.min.js"></script>
+<!--JS Social JS-->
+
 <script type="text/javascript">
     <?php if ($menu == 'home') { ?>jQuery('#contentProvider').select2();<?php } ?>
-    <?php if ($menu == 'search' && $subMenu == 'recent') { ?>jQuery('#contentProvider').select2();<?php } ?>
+    <?php if ($menu == 'discussion') { ?>
+        jQuery(function() {
+            for (var i = 0; i < discussionCount; i++) {
+                jQuery("#shareRoundIcons" + i).jsSocials({
+                    url: discussionUrl[i],
+                    text: discussionText[i],
+                    showLabel: false,
+                    showCount: false,
+                    shares: ["email", "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon", "whatsapp", "telegram", "viber", "pocket", "messenger", "vkontakte"]
+                });
+            }
+        })
+
+    <?php } ?>
 </script>
 
 </body>

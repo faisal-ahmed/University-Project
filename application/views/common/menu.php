@@ -23,7 +23,7 @@
                             <a href="#" class="dropdown-toggle <?php if ($menu == 'menu') echo "active"?>" data-toggle="dropdown">My Menu <i class="fa fa-angle-down"></i></a>
                             <ul class="dropdown-menu">
                                 <li class="<?php if ($menu == 'bookmark') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/Bookmark">Bookmarked Content</a></li>
-                                <li class="<?php if ($menu == 'room') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/Discussion">Discussion Board</a></li>
+                                <li class="<?php if ($menu == 'discussion') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/Discussion">Discussion Board</a></li>
                                 <li class="<?php if ($menu == 'profile') echo "active"?>"><a href="<?php echo base_url(); ?>index.php/Auth/Profile">My Profile</a></li>
                             </ul>
                         </li>
