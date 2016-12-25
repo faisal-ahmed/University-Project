@@ -77,13 +77,15 @@ class Auth extends Base
                 $config['max_size']             = 2500;
                 $profile_picture = null;
 
-                $this->load->library('upload', $config);
+                if ($_FILES['profile_picture']['name'] != '') {
+                    $this->load->library('upload', $config);
 
-                if ( ! $this->upload->do_upload('profile_picture')) {
-                    $data['error'] = $this->upload->display_errors();
-                } else {
-                    $upload_data = $this->upload->data();
-                    $profile_picture = base_url() . "static/uploads/" . $upload_data['file_name'];
+                    if ( ! $this->upload->do_upload('profile_picture')) {
+                        $data['error'] = $this->upload->display_errors();
+                    } else {
+                        $upload_data = $this->upload->data();
+                        $profile_picture = base_url() . "static/uploads/" . $upload_data['file_name'];
+                    }
                 }
 
                 if (($status = $this->UserModel->updateProfile($this->getUserId(), $profile_picture)) === true) {
