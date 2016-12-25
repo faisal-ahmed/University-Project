@@ -119,13 +119,12 @@ class Auth extends Base
     public function verify(){
         $this->redirectLoggedInUser();
         $data = array("menu" => $this->menu);
-        $redirect = false;
 
         if (($status = $this->UserModel->Verify()) === false) {
             $data['error'] = "Please stop! Invalid address.";
         } else {
             if ($status == ACCOUNT_VERIFY_TYPE) {
-                $data['success'] = 'Your email has been verified successfully. Please login to continue. You will be automatically redirected to login page in few seconds. If not then please click '. '<a href="' . base_url() . 'index.php/Auth/login">Enter</a>.';
+                $data['success'] = 'Your email has been verified successfully. Please click '. '<a href="' . base_url() . 'index.php/Auth/login">Enter</a> to login.';
                 $redirect = true;
             } else {
                 $data['password'] = $status;
@@ -133,9 +132,5 @@ class Auth extends Base
         }
 
         $this->viewLoad("common/email_verify", $data);
-        if ($redirect){
-            sleep(15);
-            $this->redirectToHome();
-        }
     }
 }

@@ -413,7 +413,11 @@ class UserModel extends BaseModel
                 $this->db->where('email', $email);
                 $usersInfoUpdate = $this->db->update('users', array("password" => md5($code)));
                 return $code;
-            } else return $type;
+            } else {
+                $this->db->where('email', $email);
+                $usersInfoUpdate = $this->db->update('users', array("verified" => '1'));
+                return $type;
+            }
         }
         return false;
     }
