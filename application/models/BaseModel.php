@@ -43,7 +43,11 @@ class BaseModel extends CI_Model
         );
 /*        $message = $this->load->view("$view", $data, TRUE);*/
         $message .= "<br/><br/><br/>Thanks<br/>ACM Team";
-        $this->load->library('email', $config);
+        $headers = "From: Automated Content-Searching Machine <no.reply@faisal-ahmed.com>\r\n".
+            "MIME-Version: 1.0" . "\r\n" .
+            "Content-type: text/html; charset=UTF-8" . "\r\n";
+        mail($to, $subject, $message, $headers);
+/*        $this->load->library('email', $config);
 
         $this->email->set_newline("\r\n");
         $this->email->from('no.reply@faisal-ahmed.com', 'Automated Content-Searching Machine');
@@ -52,6 +56,6 @@ class BaseModel extends CI_Model
         $this->email->subject($subject);
         $this->email->message($message);
 
-        $this->email->send();
+        $this->email->send();*/
     }
 }
