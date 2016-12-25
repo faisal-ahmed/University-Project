@@ -52,6 +52,6 @@ class BaseModel extends CI_Model
         $this->email->subject($subject);
         $this->email->message($message);
 
-        //$this->email->send();
+        $this->email->send();
     }
 }

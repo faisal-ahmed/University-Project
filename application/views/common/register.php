@@ -4,6 +4,7 @@
             <h2>It's very easy to have an account. Register here.</h2>
         </div>
         <div class="row wow fadeInDown">
+            <div class="status alert alert-success alert-dismissable" style="<?php if (!isset($success)) echo 'display: none'?>"><?php echo $success ?></div>
             <div class="status alert alert-danger alert-dismissable" style="<?php if (!isset($error)) echo 'display: none'?>"><?php echo $error ?></div>
             <div class="status alert alert-warning alert-dismissable" style="<?php if (!isset($notification)) echo 'display: none'?>"><?php echo $notification ?></div>
             <form class="login-form" method="post" action="">
