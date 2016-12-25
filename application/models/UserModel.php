@@ -111,8 +111,18 @@ class UserModel extends BaseModel
         $newPassword = $this->postGet('newPassword');
         $confirmPassword = $this->postGet('confirmPassword');
         $password = $this->postGet('currentPassword');
-        $triggerEmailVerification = false;
-        $passwordValid = $this->passwordCheck($userId, $password);
+        $passwordValid = $triggerEmailVerification = false;
+        $existingEmail = '';
+
+        $this->db->where('id', $userId);
+        $this->db->where('password', md5($password));
+        $res = $this->db->get('users');
+
+        foreach ($res->result() as $user) {
+            $passwordValid = true;
+            $existingEmail = $user->email;
+            break;
+        }
 
         if ($passwordValid && $newPassword == $confirmPassword) {
             $usersData = array("modified_at" => time());
@@ -134,7 +144,7 @@ class UserModel extends BaseModel
                 $usersData['phone'] = $this->postGet('phone');
             }
 
-            if ($this->postGet('email')) {
+            if ($existingEmail != $this->postGet('email')) {
                 $usersData['email'] = $this->postGet('email');
                 $usersData['verified'] = 0;
                 $triggerEmailVerification = true;
