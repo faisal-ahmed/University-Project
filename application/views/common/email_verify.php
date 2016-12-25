@@ -6,7 +6,7 @@
             <div class="status alert alert-success alert-dismissable" style="<?php if (!isset($success)) echo 'display: none'?>"><?php echo $success ?></div>
             <div class="status alert alert-info alert-dismissable" style="<?php if (!isset($password)) echo 'display: none'?>">
                 Please use the following auto generated as your password to <a href="<?php echo base_url() ?>index.php/Auth/login" target="_blank">login</a>. Once you login then don't forget to reset your password.
-                Your Code<strong><?php echo $password; ?></strong>.
+                Your Code is <strong><?php echo $password; ?></strong>.
             </div>
         </div>
 
