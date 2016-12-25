@@ -18,6 +18,7 @@ class Discussion extends Base
     public function __construct()
     {
         parent::__construct();
+        $this->redirectGeneralUser();
     }
 
     public function index()

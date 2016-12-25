@@ -26,7 +26,13 @@ class Base extends CI_Controller {
 
     protected function redirectLoggedInUser(){
         if ($this->isLoggedIn()) {
-            redirect('Home', 'refresh');
+            $this->redirectToHome();
+        }
+    }
+
+    protected function redirectGeneralUser(){
+        if (!$this->isLoggedIn()) {
+            $this->redirectToHome();
         }
     }
 

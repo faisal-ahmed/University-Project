@@ -17,7 +17,7 @@
                     <div style="max-height: 600px; overflow-y: scroll;">
                         <?php if (isset($discussion['comments'])) foreach ($discussion['comments'] as $key => $value) { ?>
                         <div class="single_comments" style="clear: both">
-                            <img src="<?php echo ($value['profile_picture'] != '') ? $value['profile_picture'] : base_url() . "static/images/blog/avatar3.png"; ?>" alt="">
+                            <img src="<?php echo ($value['profile_picture'] != '') ? $value['profile_picture'] : base_url() . "static/images/blog/avatar3.png"; ?>" alt="" style="height: 120px; width: 120px; margin-bottom: 10px;">
                             <p><?php echo $value['comment'] ?></p>
                             <div class="entry-meta small muted">
                                 <span>By <strong><?php echo $value['fullname'] ?></strong> </span>On <?php echo date("jS F, Y \a\\t h:i:s A", $value['at']) ?>.

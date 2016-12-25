@@ -32,6 +32,8 @@ class UserModel extends BaseModel
 /*            $this->session->set_userdata('login', true);
             $this->session->set_userdata('username', $user->first_name . " " . $user->last_name);
             $this->session->set_userdata('user_id', $user->id);*/
+            $this->db->where('id', $user->id);
+            $usersInfoUpdate = $this->db->update('users', array('last_logged_in' => time()));
             return true;
         }
         return false;
@@ -80,31 +82,52 @@ class UserModel extends BaseModel
         return true;
     }
 
-    function updateProfile($userId){
-        $newPassword = $this->postGet('newPassword');
-        $confirmPassword = $this->postGet('confirmPassword');
-        $password = $this->postGet('currentPassword');
-        $passwordValid = false;
-
+    function passwordCheck($userId, $password){
         $this->db->where('id', $userId);
         $this->db->where('password', md5($password));
         $res = $this->db->get('users');
 
         foreach ($res->result() as $user) {
-            $passwordValid = true;
+            return true;
             break;
         }
 
+        return false;
+    }
+
+    function updateProfile($userId, $uploadedPictureUrl = null){
+        $newPassword = $this->postGet('newPassword');
+        $confirmPassword = $this->postGet('confirmPassword');
+        $password = $this->postGet('currentPassword');
+        $triggerEmailVerification = false;
+        $passwordValid = $this->passwordCheck($userId, $password);
+
         if ($passwordValid && $newPassword == $confirmPassword) {
-            //TODO: Profile Picture upload
-            $usersData = array(
-                'first_name' => $this->postGet('first_name'),
-                'last_name' => $this->postGet('last_name'),
-                'phone' => $this->postGet('phone'),
-                'email' => $this->postGet('email'),
-                'date_of_birth' => $this->postGet('date_of_birth'),
-                'profile_picture' => $this->postGet('profile_picture'),
-            );
+            if ($this->postGet('first_name')) {
+                $usersData['first_name'] = $this->postGet('first_name');
+            }
+
+            if ($this->postGet('last_name')) {
+                $usersData['last_name'] = $this->postGet('last_name');
+            }
+
+            if ($this->postGet('phone')) {
+                $usersData['phone'] = $this->postGet('phone');
+            }
+
+            if ($this->postGet('email')) {
+                $usersData['email'] = $this->postGet('email');
+                $usersData['verified'] = 0;
+                $triggerEmailVerification = true;
+            }
+
+            if ($this->postGet('date_of_birth')) {
+                $usersData['date_of_birth'] = $this->postGet('date_of_birth');
+            }
+
+            if ($uploadedPictureUrl != null) {
+                $usersData['profile_picture'] = $uploadedPictureUrl;
+            }
 
             if ($newPassword != '') {
                 $usersData['password'] = md5($newPassword);
@@ -117,11 +140,35 @@ class UserModel extends BaseModel
                 return "An error found. Please try again later!";
             }
 
+            if ($triggerEmailVerification) {
+                //TODO: Trigger Email Verification
+            }
+
         } else {
             return (!$passwordValid) ? 'Invalid Current Password' : "New Password doesn't match.";
         }
 
         return true;
+    }
+
+    function getProfileInfo($userId){
+        $return = array();
+        $this->db->where('id', $userId);
+        $res = $this->db->get('users');
+
+        foreach ($res->result() as $user) {
+            $return = array(
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'phone' => $user->phone,
+                'email' => $user->email,
+                'date_of_birth' => $user->date_of_birth,
+                'profile_picture' => $user->profile_picture,
+            );
+            break;
+        }
+        
+        return $return;
     }
 
     /* Bookmark Model */

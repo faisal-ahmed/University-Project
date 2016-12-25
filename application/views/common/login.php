@@ -27,7 +27,7 @@
         <div class="row">
             <div class="get-started center wow fadeInDown animated" style="visibility: visible; animation-name: fadeInDown;">
                 <h2>Ready to get started</h2>
-                <p class="lead">If you do not have any account and want to unlock our premium features then please register for an account here.</p>
+                <p class="lead">If you do not have any account and want to unlock our premium features then please register for an account below.</p>
                 <div class="request">
                     <h4><a href="<?php echo base_url() ?>index.php/Auth/register" style="padding: 5px 42px;">Register Here</a></h4>
                 </div>
