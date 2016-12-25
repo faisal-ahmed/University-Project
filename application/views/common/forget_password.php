@@ -6,7 +6,7 @@
         </div>
         <div class="row wow fadeInDown">
             <div class="status alert alert-success" style="display: none"></div>
-            <form id="main-contact-form" class="login-form" method="post" action="">
+            <form class="login-form" method="post" action="">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email *</label>
