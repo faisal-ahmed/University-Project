@@ -134,7 +134,7 @@ class Auth extends Base
 
         $this->viewLoad("common/email_verify", $data);
         if ($redirect){
-            sleep(6);
+            sleep(15);
             $this->redirectToHome();
         }
     }
