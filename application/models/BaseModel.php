@@ -40,16 +40,7 @@ class BaseModel extends CI_Model
     function sendEmail($to, $subject, $message){
         $config = Array(
             'mailtype'  => 'html',
-/*            'protocol' => 'smtp',
-            'smtp_host' => 'ssl://smtp.googlemail.com',
-            'smtp_port' => 465,
-            'smtp_user' => 'faisal.ahmed0001@gmail.com',
-            'smtp_pass' => '$R@h1w@134431$',
-            'charset'   => 'iso-8859-1',
-            'wordwrap'   => TRUE*/
         );
-//        $config['protocol'] = 'sendmail';
-//        $config['mailpath'] = '/usr/sbin/sendmail';
 
 /*        $message = $this->load->view("$view", $data, TRUE);*/
         $message .= "<br/><br/><br/>Thanks<br/>ACM Team";
