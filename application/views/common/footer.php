@@ -33,8 +33,17 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.min.js"></script>
 <!--JS Social JS-->
 
+<!--jQuery Data Tables JS-->
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<!--jQuery Data Tables JS-->
+
 <script type="text/javascript">
-    <?php if ($menu == 'home') { ?>jQuery('#contentProvider').select2();<?php } ?>
+    <?php if ($menu == 'home') { ?>
+        jQuery(function(){
+            jQuery('#homeTable').DataTable();
+        });
+        jQuery('#contentProvider').select2();
+    <?php } ?>
     <?php if ($menu == 'discussion') { ?>
         jQuery(function() {
             for (var i = 0; i < discussionCount; i++) {
@@ -46,8 +55,15 @@
                     shares: ["email", "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon", "whatsapp", "telegram", "viber", "pocket", "messenger", "vkontakte"]
                 });
             }
-        })
 
+            jQuery('#discussionTable').DataTable();
+        });
+
+    <?php } ?>
+    <?php if ($menu == 'bookmark') { ?>
+        jQuery(function(){
+            jQuery('#bookmarkTable').DataTable();
+        });
     <?php } ?>
 </script>
 

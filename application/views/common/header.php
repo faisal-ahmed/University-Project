@@ -23,6 +23,10 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials-theme-classic.css" />
     <!--JS Social CSS-->
 
+    <!--jQuery Data Tables CSS-->
+    <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <!--jQuery Data Tables CSS-->
+
     <link href="<?php echo base_url() ?>static/css/custom.css" rel="stylesheet">
     <link href="<?php echo base_url() ?>static/css/responsive.css" rel="stylesheet">
     <!--[if lt IE 9]>
